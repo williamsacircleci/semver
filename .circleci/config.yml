@@ -13,6 +13,9 @@ only-master: &only-master
     branches:
       only: master
 
+context: &context
+  context:
+
 ### COMMANDS
 
 commands:
