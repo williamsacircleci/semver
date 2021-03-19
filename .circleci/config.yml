@@ -121,9 +121,9 @@ workflows:
       - build:
           name: build-docker
           <<: *ignore-master
-      # - build-push:
-      #     name: build-push-docker
-      #     aws_access_key_id: ${AWS_ACCESS_KEY_ID}
-      #     aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
-      #     aws_region: ${AWS_REGION}
-      #     <<: *only-master
+      - build-push:
+          name: build-push-docker
+          aws_access_key_id: ${AWS_ACCESS_KEY_ID}
+          aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
+          aws_region: ${AWS_REGION}
+          <<: *only-master
