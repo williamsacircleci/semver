@@ -65,19 +65,19 @@ commands:
     steps:
       - run: scripts/ci_build_docker.sh docker_build
 
-  docker-push:
-    description: "Push docker image to registry"
-    parameters:
-      aws_access_key_id:
-        description: AWS Access Key ID
-        type: string
-        default: "${AWS_ACCESS_KEY_ID}"
-      aws_secret_key:
-        description: AWS Secret Key
-        type: string
-        default: "${AWS_SECRET_ACCESS_KEY}"
-    steps:
-      - run: scripts/ci_build_docker.sh docker_build_push
+  # docker-push:
+  #   description: "Push docker image to registry"
+  #   parameters:
+  #     aws_access_key_id:
+  #       description: AWS Access Key ID
+  #       type: string
+  #       default: "${AWS_ACCESS_KEY_ID}"
+  #     aws_secret_key:
+  #       description: AWS Secret Key
+  #       type: string
+  #       default: "${AWS_SECRET_ACCESS_KEY}"
+  #   steps:
+  #     - run: scripts/ci_build_docker.sh docker_build_push
 
 
 
