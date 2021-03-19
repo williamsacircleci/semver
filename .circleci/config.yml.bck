@@ -1,0 +1,129 @@
+version: 2.1
+
+## Aliases
+
+ignore-master: &ignore-master
+  filters:
+    branches:
+      ignore:
+        - master
+
+only-master: &only-master
+  filters:
+    branches:
+      only: master
+
+### COMMANDS
+
+commands:
+  circle-default-envs:
+    description: "Default Circle Environment variables"
+    steps:
+      - run: |
+          export GIT_BRANCH=${CIRCLE_BRANCH}
+          export BUILD_ID=$(echo ${CIRCLE_SHA1} | rev |cut -c1-4 | rev)
+          export BUILD_TAG="circleci-${CIRCLE_JOB}-${CIRCLE_BUILD_NUM}"
+          export BUILD_DISPLAY_NAME=${CIRCLE_BUILD_NUM}
+          export JOB_BASE_NAME=${CIRCLE_JOB}
+          export JOB_NAME=${CIRCLE_BUILD_URL}
+          echo "export GIT_BRANCH=${GIT_BRANCH}" >> $BASH_ENV
+          echo "export BUILD_ID=${BUILD_ID}" >> $BASH_ENV
+          echo "export BUILD_TAG=${BUILD_TAG}" >> $BASH_ENV
+          echo "export BUILD_DISPLAY_NAME=${BUILD_DISPLAY_NAME}" >> $BASH_ENV
+          echo "export JOB_BASE_NAME=${JOB_BASE_NAME}" >> $BASH_ENV
+          echo "export JOB_NAME=${JOB_NAME}" >> $BASH_ENV
+          source $BASH_ENV
+
+  aws-account-credentials:
+    description: "AWS credentials to use"
+    parameters:
+      aws_access_key_id:
+        description: AWS Access Key ID
+        type: string
+        default: "${AWS_ACCESS_KEY_ID}"
+      aws_secret_key:
+        description: AWS Secret Key
+        type: string
+        default: "${AWS_SECRET_ACCESS_KEY}"
+      aws_assume_role_arn:
+        description: AWS access role
+        type: string
+        default: DevXATerragrunt
+    steps:
+      - run: |
+          export AWS_ACCESS_KEY_ID=<< parameters.aws_access_key_id >>
+          export AWS_SECRET_ACCESS_KEY=<< parameters.aws_secret_key >>
+          export temp_role=$(aws sts assume-role \
+                  --role-arn << parameters.aws_assume_role_arn >> \
+                  --role-session-name "circle-ci-assume")
+          echo "export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" >> $BASH_ENV
+          echo "export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" >> $BASH_ENV
+          source $BASH_ENV
+
+  docker-build:
+    description: "Default Circle Environment variables"
+    steps:
+      - run: scripts/ci_build_docker.sh docker_build
+
+  docker-push:
+    description: "Push docker image to registry"
+    parameters:
+      aws_access_key_id:
+        description: AWS Access Key ID
+        type: string
+        default: "${AWS_ACCESS_KEY_ID}"
+      aws_secret_key:
+        description: AWS Secret Key
+        type: string
+        default: "${AWS_SECRET_ACCESS_KEY}"
+    steps:
+      - run: scripts/ci_build_docker.sh docker_build_push
+
+
+
+### JOBS
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - circle-default-envs
+      - docker-build
+
+  build-push:
+    parameters:
+      aws_access_key_id:
+         description: aws access key id
+         type: string
+      aws_secret_key:
+         description: aws secret key secret
+         type: string
+      aws_region:
+          description: aws secret key secret
+          type: string
+    machine:
+      image: ubuntu-2004:202010-01
+    steps:
+      - checkout
+      - circle-default-envs
+      - docker-push
+
+
+### WORKFLOWS
+
+workflows:
+  version: 2.1
+
+  build:
+    jobs:
+      - build:
+          name: build-docker
+          <<: *ignore-master
+      # - build-push:
+      #     name: build-push-docker
+      #     aws_access_key_id: ${AWS_ACCESS_KEY_ID}
+      #     aws_secret_key: ${AWS_SECRET_ACCESS_KEY}
+      #     aws_region: ${AWS_REGION}
+      #     <<: *only-master
