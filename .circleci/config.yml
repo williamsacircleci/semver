@@ -52,6 +52,10 @@ commands:
         description: AWS access role
         type: string
         default: DevXATerragrunt
+      aws_region:
+        description: AWS region
+        type: string
+        default: eu-west-1
     steps:
       - run: |
           export AWS_ACCESS_KEY_ID=<< parameters.aws_access_key_id >>
@@ -97,9 +101,6 @@ jobs:
       aws_secret_key:
          description: aws secret key secret
          type: string
-      aws_region:
-          description: aws region key secret
-          type: string
     steps:
       - checkout
       - circle-default-envs
