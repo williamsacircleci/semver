@@ -94,6 +94,7 @@ jobs:
       - checkout
       - circle-default-envs
       - docker-build
+      - aws-account-credentials
 
   build-push:
     parameters:
@@ -123,6 +124,10 @@ workflows:
     jobs:
       - build:
           name: build-docker
+          aws_assume_role_arn: "${AWS_ASSUME_ROLE_ARN_MGMT}"
+          aws_secret_key: "${AWS_ACCESS_KEY_ID}"
+          aws_access_key_id: "${AWS_ACCESS_KEY}"
+
           <<: *ignore-master
       # - build-push:
       #     name: build-push-docker
