@@ -98,7 +98,7 @@ jobs:
          description: aws secret key secret
          type: string
       aws_region:
-          description: aws secret key secret
+          description: aws region key secret
           type: string
     steps:
       - checkout
