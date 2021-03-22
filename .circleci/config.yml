@@ -101,6 +101,9 @@ jobs:
       aws_secret_key:
          description: aws secret key secret
          type: string
+      aws_assume_role_arn:
+          description: aws role arn
+          type: string
     steps:
       - checkout
       - circle-default-envs
@@ -135,7 +138,7 @@ workflows:
     jobs:
       - build:
           name: build-docker
-          # aws_assume_role_arn: "${AWS_ASSUME_ROLE_ARN_MGMT}"
+          aws_assume_role_arn: "${AWS_ASSUME_ROLE_ARN_MGMT}"
           aws_secret_key: "${AWS_ACCESS_KEY_ID}"
           aws_access_key_id: "${AWS_ACCESS_KEY}"
 
