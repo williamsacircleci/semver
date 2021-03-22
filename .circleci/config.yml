@@ -109,6 +109,10 @@ jobs:
       - circle-default-envs
       - docker-build
       - aws-account-credentials
+      - run:
+          name: test the creds 
+          command: |
+            aws s3 ls
 
   build-push:
     parameters:
