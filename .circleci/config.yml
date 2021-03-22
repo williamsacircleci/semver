@@ -49,9 +49,8 @@ commands:
         type: string
         default: "${AWS_SECRET_ACCESS_KEY}"
       aws_assume_role_arn:
-        description: AWS access role
+        description: AWS Role ARN To Assumes
         type: string
-        default: DevXATerragrunt
       aws_region:
         description: AWS region
         type: string
