@@ -15,6 +15,7 @@ only-master: &only-master
 
 context: &context
   context:
+    - aws_test
 
 ### COMMANDS
 
