@@ -111,7 +111,6 @@ jobs:
       - checkout
       - circle-default-envs
       - docker-build
-      - aws-account-credentials
       - run:
           name: test the creds 
           command: |
