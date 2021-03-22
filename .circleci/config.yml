@@ -127,6 +127,8 @@ jobs:
       - checkout
       - circle-default-envs
       - docker-push
+      - assume-aws-role:
+          aws_assume_role_arn: << parameters.aws_assume_role_arn >>
 
 
 ### WORKFLOWS
