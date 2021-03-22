@@ -52,6 +52,7 @@ commands:
       aws_assume_role_arn:
         description: AWS Role ARN To Assumes
         type: string
+        default: "${AWS_ASSUME_ROLE_ARN_MGMT}"
       aws_region:
         description: AWS region
         type: string
