@@ -127,8 +127,6 @@ jobs:
       - checkout
       - circle-default-envs
       - docker-push
-      - assume-aws-role:
-          aws_assume_role_arn: << parameters.aws_assume_role_arn >>
 
 
 ### WORKFLOWS
@@ -143,7 +141,6 @@ workflows:
           aws_assume_role_arn: "${AWS_ASSUME_ROLE_ARN_MGMT}"
           aws_secret_key: "${AWS_ACCESS_KEY_ID}"
           aws_access_key_id: "${AWS_ACCESS_KEY}"
-
           <<: *ignore-master
       # - build-push:
       #     name: build-push-docker
